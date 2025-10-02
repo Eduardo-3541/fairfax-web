@@ -12,7 +12,9 @@ export default function NavLink({ href, children, className, style, ...rest }: N
   return (
     <Link
       href={href}
-      className={`relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-current after:transition-[width] after:duration-300 hover:after:w-full ${className ?? ''}`}
+      className={`relative font-semibold uppercase tracking-[0.18em] after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[3px] after:w-0 after:bg-current after:transition-[width] after:duration-300 after:ease-out hover:after:w-full ${
+        className ?? ""
+      }`}
       style={style}
       {...rest}
     >
@@ -20,4 +22,3 @@ export default function NavLink({ href, children, className, style, ...rest }: N
     </Link>
   );
 }
-

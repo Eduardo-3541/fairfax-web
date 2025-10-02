@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from "react";
 import NavLink from "./NavLink";
+import type { NavItem } from "./headerTypes";
 
 type Props = {
   open?: boolean;
   onToggle?: (open: boolean) => void;
+  items: NavItem[];
 };
 
-export default function HamburgerMenu({ open: controlledOpen, onToggle }: Props) {
+export default function HamburgerMenu({ open: controlledOpen, onToggle, items }: Props) {
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
   const open = controlledOpen ?? uncontrolledOpen;
   const [animateItems, setAnimateItems] = useState(false);
@@ -57,13 +59,7 @@ export default function HamburgerMenu({ open: controlledOpen, onToggle }: Props)
         <div className="w-screen" style={{ backgroundColor: "var(--brand-dark)" }}>
           <div className="px-4 sm:px-6 pt-14 sm:pt-24 pb-10 sm:pb-16 text-center" style={{ color: "var(--brand-light)" }}>
             <nav className="flex flex-col items-center gap-2 sm:gap-3 text-xl sm:text-4xl tracking-wide font-semibold">
-              {[
-                { href: "#home", label: "HOME" },
-                { href: "#about", label: "ABOUT" },
-                { href: "#portfolio", label: "PORTFOLIO" },
-                { href: "#shop", label: "SHOP" },
-                { href: "#contact", label: "CONTACT" },
-              ].map(({ href, label }, index) => (
+              {items.map(({ href, label }, index) => (
                 <NavLink
                   key={href}
                   href={href}

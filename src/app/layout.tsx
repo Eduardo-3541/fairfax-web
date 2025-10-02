@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Geist_Mono } from "next/font/google";
+import { Fraunces, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
 
-const cormorant = Cormorant_Garamond({
-  variable: "--font-geist-sans",
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
 });
 
 const geistMono = Geist_Mono({
@@ -27,7 +27,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${cormorant.variable} ${geistMono.variable} antialiased`}
+        className={`${fraunces.variable} ${geistMono.variable} flex min-h-screen flex-col antialiased`}
+        style={{ paddingTop: "var(--header-height, 0px)" }}
       >
         <Header />
         {children}

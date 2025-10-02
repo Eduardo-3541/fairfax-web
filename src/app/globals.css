@@ -2,13 +2,15 @@
 
 :root {
   /* Brand palette */
-  --brand-light: #e0d7cb;
+  --brand-light: #fff6e4;
   --brand-dark: #3D4E57;
+  --brand-tertiary: #C8CBB9;
 }
 
 @theme inline {
   --color-brand-light: var(--brand-light);
   --color-brand-dark: var(--brand-dark);
+  --color-brand-tertiary: var(--brand-tertiary);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,7 +21,7 @@
 }
 
 body {
-  font-family: var(--font-geist-sans), serif;
+  font-family: var(--font-fraunces), serif;
   background-color: var(--brand-light);
 }
 
