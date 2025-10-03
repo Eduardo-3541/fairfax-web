@@ -10,8 +10,6 @@
     "optimize:images": "node scripts/optimize-images.mjs"
   },
   "dependencies": {
-    "instafeed.js": "^2.1.0",
-    "keen-slider": "^6.8.6",
     "next": "15.5.4",
     "react": "19.1.0",
     "react-dom": "19.1.0",

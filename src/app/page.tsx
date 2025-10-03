@@ -207,19 +207,19 @@ export default function Home() {
   const featuredProjects: ShowcaseItem[] = [
     {
       key: "chelsea-penthouse",
-      text: "CHELSEA PENTHOUSE",
+      text: "PROJECT 1",
       imageSrc: "/images/projects.avif",
       imageAlt: "Luxurious living room bathed in natural light",
     },
     {
       key: "cotswolds-retreat",
-      text: "COTSWOLDS RETREAT",
+      text: "PROJECT 2",
       imageSrc: "/images/process.avif",
       imageAlt: "Warm neutral-toned interior with layered textures",
     },
     {
       key: "kensington-residence",
-      text: "KENSINGTON RESIDENCE",
+      text: "PROJECT 3",
       imageSrc: "/images/main.avif",
       imageAlt: "Elegant open-plan interior with statement staircase",
     },
