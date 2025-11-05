@@ -20,19 +20,22 @@ const HEADER_VARIANTS: HeaderVariantsMap = {
 
 type HeaderVariantKey = keyof HeaderVariantsMap;
 
-const ACTIVE_HEADER_VARIANT = (process.env.NEXT_PUBLIC_HEADER_VARIANT as HeaderVariantKey | undefined) ?? "split";
+const ACTIVE_HEADER_VARIANT = (process.env.NEXT_PUBLIC_HEADER_VARIANT as HeaderVariantKey | undefined) ?? "overlay";
 
 const HeaderComponent = HEADER_VARIANTS[ACTIVE_HEADER_VARIANT] ?? HEADER_VARIANTS.inline;
 
 const NAV_ITEMS: NavItem[] = [
-  { href: "#process", label: "PROCESS" },
-  { href: "#about", label: "ABOUT" },
-  { href: "#projects", label: "PROJECTS" },
-  { href: "#shop", label: "SHOP" },
-  { href: "#contact", label: "CONTACT" },
+  { href: "/", label: "HOME" },
+  { href: "under-construction", label: "PROCESS" },
+  { href: "under-construction", label: "ABOUT" },
+  { href: "under-construction", label: "INTERIORS" },
+  { href: "under-construction", label: "UPHOLSTERY" },
+  { href: "under-construction", label: "SOFT FURNISHINGS" },
+  { href: "under-construction", label: "SERVICES" },
+
 ];
 
-export default function Header() {
+export default function Header() {  
   const wrapperRef = useRef<HTMLDivElement>(null);
   const initialHeaderHeightRef = useRef<number | null>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -90,7 +93,7 @@ export default function Header() {
   }, [headerHeight]);
 
   const sharedNavProps = useMemo<Omit<HeaderSharedProps, "isScrolled" | "scrollProgress">>(() => {
-    const contactItem = NAV_ITEMS.find((item) => item.href === "#contact");
+    const contactItem = NAV_ITEMS.find((item) => item.href === "under-construction");
     const primaryNavItems = contactItem
       ? NAV_ITEMS.filter((item) => item.href !== contactItem.href)
       : NAV_ITEMS;

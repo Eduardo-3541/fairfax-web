@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import type { HeaderSharedProps } from "../headerTypes";
-import Logo from "../icons/logo";
+import Logo from "../icons/logoinline";
 import NavLink from "../NavLink";
+import Button from "../Button";
 
 type InlineNavHeaderProps = Pick<HeaderSharedProps, "primaryNavItems" | "contactItem" | "isScrolled" | "scrollProgress">;
 
@@ -61,19 +62,20 @@ export default function InlineNavHeader({
               transition: "gap 0.2s ease-out, font-size 0.2s ease-out, letter-spacing 0.2s ease-out",
             }}
           >
-            {primaryNavItems.map(({ href, label }) => (
-              <NavLink key={href} href={href} className="whitespace-nowrap px-1 pb-1 hover:opacity-90">
+            {primaryNavItems.map(({ href, label }, index) => (
+              <NavLink
+                key={`${href}-${label}-${index}`}
+                href={href}
+                className={`whitespace-nowrap px-1 pb-1 hover:opacity-90 ${index === 0 ? "ml-8" : ""}`}
+              >
                 {label}
               </NavLink>
             ))}
           </nav>
           {contactItem ? (
-            <Link
-              href={contactItem.href}
-              className="ml-auto inline-flex items-center justify-center whitespace-nowrap rounded-full border border-current px-4 py-1.5 text-sm font-semibold uppercase tracking-wide text-[var(--brand-dark)] transition-colors hover:bg-[var(--brand-dark)] hover:text-[var(--brand-light)] sm:px-5 sm:py-2 sm:text-base"
-            >
+            <Button href={contactItem.href} className="ml-auto">
               {contactItem.label}
-            </Link>
+            </Button>
           ) : null}
         </div>
       </div>

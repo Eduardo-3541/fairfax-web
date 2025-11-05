@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import type { HeaderSharedProps } from "../headerTypes";
-import Logo from "../icons/logo";
+import Logo from "../icons/logoinline";
 import NavLink from "../NavLink";
+import Button from "../Button";
 
 type SplitNavHeaderProps = Pick<HeaderSharedProps, "leftNavItems" | "rightNavItems" | "contactItem" | "isScrolled" | "scrollProgress">;
 
@@ -62,8 +63,12 @@ export default function SplitNavHeader({
                   "gap 0.2s ease-out, transform 0.2s ease-out, font-size 0.2s ease-out, letter-spacing 0.2s ease-out",
               }}
             >
-              {leftNavItems.map(({ href, label }) => (
-                <NavLink key={href} href={href} className="whitespace-nowrap px-1 pb-1 hover:opacity-90">
+              {leftNavItems.map(({ href, label }, index) => (
+                <NavLink
+                  key={`${href}-${label}-left-${index}`}
+                  href={href}
+                  className="whitespace-nowrap px-1 pb-1 hover:opacity-90"
+                >
                   {label}
                 </NavLink>
               ))}
@@ -92,20 +97,21 @@ export default function SplitNavHeader({
                   "gap 0.2s ease-out, transform 0.2s ease-out, font-size 0.2s ease-out, letter-spacing 0.2s ease-out",
               }}
             >
-              {rightNavItems.map(({ href, label }) => (
-                <NavLink key={href} href={href} className="whitespace-nowrap px-1 pb-1 hover:opacity-90">
+              {rightNavItems.map(({ href, label }, index) => (
+                <NavLink
+                  key={`${href}-${label}-right-${index}`}
+                  href={href}
+                  className="whitespace-nowrap px-1 pb-1 hover:opacity-90"
+                >
                   {label}
                 </NavLink>
               ))}
             </nav>
           </div>
           {contactItem ? (
-            <Link
-              href={contactItem.href}
-              className="justify-self-end inline-flex items-center justify-center whitespace-nowrap rounded-full border border-current px-4 py-1.5 text-sm font-semibold uppercase tracking-wide text-[var(--brand-dark)] transition-colors hover:bg-[var(--brand-dark)] hover:text-[var(--brand-light)] sm:px-5 sm:py-2 sm:text-base"
-            >
+            <Button href={contactItem.href} className="justify-self-end">
               {contactItem.label}
-            </Link>
+            </Button>
           ) : null}
         </div>
       </div>

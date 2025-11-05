@@ -3,11 +3,13 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { HeaderSharedProps } from "../headerTypes";
-import Logo from "../icons/logo";
+import LogoInline from "../icons/logoinline";
+import LogoSplit from "../icons/logosplit";
 import HamburgerMenu from "../HamburgerMenu";
+import Button from "../Button";
 
 const CLOSE_COLOR_RESET_MS = 300;
-const MENU_ANIMATION_MS = 1000; // keep in sync with HamburgerMenu
+const MENU_ANIMATION_MS = 480; // keep in sync with HamburgerMenu
 
 type OverlayMenuHeaderProps = Pick<HeaderSharedProps, "navItems" | "isScrolled" | "scrollProgress">;
 
@@ -40,11 +42,11 @@ export default function OverlayMenuHeader({ navItems, isScrolled, scrollProgress
     }
   }, []);
 
-  const headerBg = menuVisualOpen ? "var(--brand-dark)" : "var(--brand-light)";
-  const headerColor = menuVisualOpen ? "var(--brand-light)" : "var(--brand-dark)";
-  const logoTextClass = menuVisualOpen ? "text-[var(--brand-light)]" : "text-[var(--brand-dark)]";
-  const headerHeight = 80 - scrollProgress * 12; // px
-  const logoScale = 1 - scrollProgress * 0.06;
+  const headerBg = "var(--brand-light)";
+  const headerColor = "var(--brand-dark)";
+  const logoTextClass = "text-[var(--brand-dark)]";
+  const headerHeight = 80 - (menuOpen ? 0 : scrollProgress) * 12; // px
+  const logoScale = menuOpen ? 1.1 : 1 - scrollProgress * 0.06;
 
   return (
     <header
@@ -58,20 +60,30 @@ export default function OverlayMenuHeader({ navItems, isScrolled, scrollProgress
           className="relative flex items-center transition-all duration-500 ease-out"
           style={{ height: `${headerHeight}px` }}
         >
+          <div className="mr-auto hidden lg:block relative z-[80]">
+            <Button href="/contact">Contact</Button>
+          </div>
           <Link
             href="/"
             aria-label="Home"
             className={`absolute left-1/2 z-[80] flex items-center gap-2 ${logoTextClass}`}
             style={{
               transform: `translateX(-50%) scale(${logoScale})`,
-              transition: "transform 0.2s ease-out",
+              transition: "transform 500ms cubic-bezier(0.22, 1, 0.36, 1)",
             }}
           >
-            <Logo className="h-8 w-auto [&_*]:fill-current transition-colors duration-300" aria-hidden="true" />
+            <LogoSplit className="h-12 w-auto [&_*]:fill-current transition-colors duration-300 lg:hidden" aria-hidden="true" />
+            <LogoInline className="hidden h-8 w-auto [&_*]:fill-current transition-colors duration-300 lg:block" aria-hidden="true" />
             <span className="sr-only">Home</span>
           </Link>
           <div className="ml-auto">
-            <HamburgerMenu open={menuOpen} onToggle={handleToggle} items={navItems} />
+            <HamburgerMenu
+              open={menuOpen}
+              onToggle={handleToggle}
+              items={navItems}
+              panelBgColor={"var(--brand-light)"}
+              panelTextColor={"var(--brand-dark)"}
+            />
           </div>
         </div>
       </div>
