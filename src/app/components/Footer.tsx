@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { SiInstagram, SiLinkedin } from "react-icons/si";
 // Use explicit extension to avoid resolver edge cases on some build systems
-import Logo from "./icons/logoinline.tsx";
+import Logo from "./icons/logoinline";
 
 const footerNav = [
   { href: "/", label: "Home" },
