@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Privacy & GDPR | Fairfax Interiors",
+  title: "Privacy & GDPR",
   description:
     "Learn how Fairfax Interiors handles personal data in accordance with UK GDPR, including the information we collect and your privacy rights.",
 };

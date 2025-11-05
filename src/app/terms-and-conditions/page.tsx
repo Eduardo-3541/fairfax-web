@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Website Terms & Conditions | Fairfax Interiors",
+  title: "Website Terms & Conditions",
   description:
     "Understand the terms that govern use of the Fairfax Interiors website, including permitted use, copyright, liability, and contact information.",
 };
