@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { SiInstagram, SiLinkedin } from "react-icons/si";
-// Use explicit extension to avoid resolver edge cases on some build systems
+// Keep the path lowercase for case-sensitive deployments
 import Logo from "./icons/logoinline";
 
 const footerNav = [
