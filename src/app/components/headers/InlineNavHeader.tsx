@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { HeaderSharedProps } from "../headerTypes";
-import Logo from "../icons/logoinline";
+import Logo from "../icons/logoinline.tsx";
 import NavLink from "../NavLink";
 import Button from "../Button";
 

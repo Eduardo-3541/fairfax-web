@@ -1,5 +1,6 @@
 import type { SVGProps } from "react";
 
+// Intentionally lowercase filename and import path for case-sensitive filesystems
 export default function LogoInline(props: SVGProps<SVGSVGElement>) {
     return (
         <svg {...props} preserveAspectRatio="xMidYMid meet" data-bbox="85.713 257.137 2999.997 162.677" viewBox="85.713 257.137 2999.997 162.677" xmlns="http://www.w3.org/2000/svg" data-type="color" role="presentation" aria-hidden="true">
