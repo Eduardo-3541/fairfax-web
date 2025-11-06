@@ -2,9 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 import NavLink from "./NavLink";
 import type { NavItem } from "./headerTypes";
 import Button from "./Button";
+import { FaInstagram } from "react-icons/fa";
 
 type Props = {
   open?: boolean;
@@ -55,6 +57,17 @@ export default function HamburgerMenu({ open: controlledOpen, onToggle, items, p
     else setUncontrolledOpen(false);
   }, [pathname, open, onToggle]);
 
+  // Reorder: place "Services" directly after "About" when both exist
+  const reorderedItems = (() => {
+    const aboutIndex = items.findIndex((i) => i.label.toLowerCase() === "about");
+    const servicesIndex = items.findIndex((i) => i.label.toLowerCase() === "services");
+    if (aboutIndex === -1 || servicesIndex === -1 || servicesIndex === aboutIndex + 1) return items;
+    const copy = items.slice();
+    const [services] = copy.splice(servicesIndex, 1);
+    copy.splice(Math.min(aboutIndex + 1, copy.length), 0, services);
+    return copy;
+  })();
+
   return (
     <div className="relative z-50">
       <button
@@ -90,25 +103,42 @@ export default function HamburgerMenu({ open: controlledOpen, onToggle, items, p
             className="px-4 sm:px-6 pt-14 sm:pt-24 pb-10 sm:pb-16 text-center flex min-h-screen flex-col items-center"
             style={{ color: panelTextColor ?? "var(--brand-light)" }}
           >
-            <nav className="flex w-full flex-col items-center gap-8 sm:gap-10 text-3xl sm:text-4xl tracking-wide font-semibold">
-              {items.map(({ href, label }, index) => (
-                <NavLink
-                  key={`${href}-${label}-${index}`}
-                  href={href}
-                  className={`opacity-80 hover:opacity-90 ${index === 0 ? "mt-16" : ""} ${
-                    animateItems ? "menu-item-fade" : "menu-item-hidden"
-                  }`}
-                  onClick={handleItemClick}
-                  style={animateItems ? { animationDelay: `${index * 120}ms` } : undefined}
-                >
-                  {label}
-                </NavLink>
+            <nav className="flex w-full flex-col items-center gap-0 text-3xl sm:text-4xl tracking-wide font-semibold">
+              {reorderedItems.map(({ href, label }, index) => (
+                <div key={`${href}-${label}-${index}`} className="w-full max-w-sm">
+                  <NavLink
+                    href={href}
+                    className={`opacity-80 hover:opacity-90 ${index === 0 ? "mt-16" : ""} ${
+                      animateItems ? "menu-item-fade" : "menu-item-hidden"
+                    }`}
+                    onClick={handleItemClick}
+                    style={animateItems ? { animationDelay: `${index * 120}ms` } : undefined}
+                  >
+                    {label}
+                  </NavLink>
+                  {index < reorderedItems.length - 1 && (
+                    <span className="my-5 sm:my-6 block h-px w-full bg-gradient-to-r from-transparent via-current/25 to-transparent" />
+                  )}
+                </div>
               ))}
             </nav>
             <div
               className={`mt-auto w-full pt-12 sm:pt-16 lg:hidden ${animateItems ? "menu-item-fade" : "menu-item-hidden"}`}
               style={animateItems ? { animationDelay: `${items.length * 120}ms` } : undefined}
             >
+              <div className="mb-6 flex justify-center">
+                <Link
+                  href="https://www.instagram.com/fairfaxinteriors"
+                  aria-label="Open Fairfax Interiors on Instagram"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center text-[var(--brand-light)] transition-opacity duration-200 hover:opacity-80"
+                  title="Instagram"
+                  onClick={handleItemClick}
+                >
+                  <FaInstagram className="h-10 w-10" />
+                </Link>
+              </div>
               <Button
                 href="/contact"
                 onClick={handleItemClick}

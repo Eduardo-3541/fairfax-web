@@ -73,7 +73,7 @@ export default function Home() {
   };
 
   const baseCardClasses =
-    "group relative flex flex-col justify-between overflow-hidden bg-[var(--brand-tertiary)] transition duration-500 ease-out hover:bg-[#d9dcc6]";
+    "group relative flex flex-col justify-between overflow-hidden bg-[var(--brand-dark)] transition duration-500 ease-out hover:bg-[color:color-mix(in_srgb,var(--brand-dark)_88%,white_12%)]";
   const variantCardClasses: Record<"grid" | "featured", string> = {
     // Force equal heights across variants to avoid visual mismatch
     grid: "min-h-[560px] p-10 sm:min-h-[560px] sm:p-10 lg:min-h-[560px] lg:p-12",
@@ -135,12 +135,14 @@ export default function Home() {
           </div>
         </div>
         <span
-          className={`relative z-10 ${variantTitleSpacing[variant]} text-center font-semibold tracking-[0.2em] text-[var(--brand-dark)] ${variantTitleClasses[variant]}`}
+          className={`relative z-10 ${variantTitleSpacing[variant]} text-center ${
+            variant === "featured" ? "font-normal" : "font-semibold"
+          } tracking-[0.2em] text-[var(--brand-light)] ${variantTitleClasses[variant]}`}
         >
-          <span className="inline-block transition-colors duration-500 group-hover:text-[var(--brand-dark)]">
+          <span className="inline-block transition-colors duration-500 group-hover:text-[var(--brand-tertiary)]">
             {item.text}
           </span>
-          <span className="mt-4 block h-[3px] w-full origin-center scale-x-0 transform bg-[var(--brand-dark)] transition-transform duration-500 ease-out group-hover:scale-x-100" />
+          <span className="mt-4 block h-[3px] w-full origin-center scale-x-0 transform bg-[var(--brand-light)] transition-transform duration-500 ease-out group-hover:scale-x-100 group-hover:bg-[var(--brand-tertiary)]" />
         </span>
         <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-br from-white/0 via-white/0 to-white/0 opacity-0 transition duration-500 ease-out group-hover:opacity-100 group-hover:from-white/20 group-hover:via-white/6" />
       </div>
@@ -302,7 +304,7 @@ function FeaturedProjectsSplit({ items }: FeaturedProjectsSplitProps) {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2">
           {/* Left: Active image */}
-          <div className="relative h-[420px] sm:h-[520px] md:h-[640px] bg-[var(--brand-tertiary)]">
+          <div className="relative h-[420px] sm:h-[520px] md:h-[640px] bg-[var(--brand-dark)]">
             {active && (
               <Image
                 src={active.imageSrc}
@@ -323,7 +325,7 @@ function FeaturedProjectsSplit({ items }: FeaturedProjectsSplitProps) {
           </div>
 
           {/* Right: List of projects */}
-          <div className="bg-[var(--brand-tertiary)] text-[var(--brand-dark)] px-6 sm:px-12 py-10 sm:py-14 flex items-center relative overflow-hidden">
+          <div className="bg-[var(--brand-dark)] text-[var(--brand-light)] px-6 sm:px-12 py-10 sm:py-14 flex items-center relative overflow-hidden">
             {/* subtle texture/light to add depth */}
             <div className="pointer-events-none absolute inset-0 opacity-[0.07] bg-[radial-gradient(1200px_500px_at_-10%_-10%,#fff,transparent_60%),radial-gradient(900px_400px_at_110%_110%,#fff,transparent_60%)]" />
             <h3 className="sr-only">Featured Projects</h3>
@@ -332,14 +334,14 @@ function FeaturedProjectsSplit({ items }: FeaturedProjectsSplitProps) {
                 <li key={item.key} className="relative">
                   {/* separator background */}
                   {index > 0 && (
-                    <span className="pointer-events-none absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-[var(--brand-dark)]/25 to-transparent" />
+                    <span className="pointer-events-none absolute inset-x-0 -top-px h-[2px] bg-gradient-to-r from-transparent via-[var(--brand-light)]/55 to-transparent" />
                   )}
                   <Link
                     href="/under-construction"
                     onMouseEnter={() => setHoveredIndex(index)}
                     onFocus={() => setHoveredIndex(index)}
                     className={`group relative flex w-full items-center justify-center gap-8 py-9 sm:py-12 text-center transition-colors ${
-                      hoveredIndex === index ? "text-[var(--brand-light)]" : "text-[var(--brand-dark)]/80"
+                      hoveredIndex === index ? "text-[var(--brand-light)]" : "text-[var(--brand-light)]/80"
                     }`}
                     aria-current={hoveredIndex === index}
                   >
@@ -360,10 +362,10 @@ function FeaturedProjectsSplit({ items }: FeaturedProjectsSplitProps) {
                       const fsSm = Math.max(minSm, smSize - extra * stepSm);
                       const fsMd = Math.max(minMd, mdSize - extra * stepMd);
                       return (
-                        <span
-                          className="uppercase font-semibold text-center max-w-[85%] sm:max-w-none whitespace-normal sm:whitespace-nowrap tracking-[0.18em] sm:tracking-[0.20em]"
-                          style={{ fontSize: `${fsBase}rem` }}
-                        >
+                          <span
+                            className="uppercase font-normal text-center max-w-[85%] sm:max-w-none whitespace-normal sm:whitespace-nowrap tracking-[0.18em] sm:tracking-[0.20em]"
+                            style={{ fontSize: `${fsBase}rem` }}
+                          >
                           <span className="sm:hidden">{item.text}</span>
                           <span className="hidden sm:inline md:hidden" style={{ fontSize: `${fsSm}rem` }}>
                             {item.text}
@@ -376,13 +378,13 @@ function FeaturedProjectsSplit({ items }: FeaturedProjectsSplitProps) {
                     })()}
                     <span className="relative flex items-center gap-3 sm:gap-4">
                       <span className={`h-[3px] w-16 sm:w-20 md:w-24 origin-right transform transition-all duration-300 ${
-                        hoveredIndex === index ? "bg-[var(--brand-light)]/90 scale-x-100" : "bg-[var(--brand-dark)]/35 scale-x-75"
+                        hoveredIndex === index ? "bg-[var(--brand-tertiary)] scale-x-100" : "bg-[var(--brand-light)]/50 scale-x-75"
                       }`} />
                     </span>
                   </Link>
                   {/* bottom separator for last element to frame list */}
                   {index === items.length - 1 && (
-                    <span className="pointer-events-none absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-[var(--brand-dark)]/20 to-transparent" />
+                    <span className="pointer-events-none absolute inset-x-0 -bottom-px h-[2px] bg-gradient-to-r from-transparent via-[var(--brand-light)]/45 to-transparent" />
                   )}
                 </li>
               ))}

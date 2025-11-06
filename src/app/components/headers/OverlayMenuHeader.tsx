@@ -7,6 +7,7 @@ import LogoInline from "../icons/logoinline";
 import LogoSplit from "../icons/logosplit";
 import HamburgerMenu from "../HamburgerMenu";
 import Button from "../Button";
+import { FaInstagram } from "react-icons/fa";
 
 const CLOSE_COLOR_RESET_MS = 300;
 const MENU_ANIMATION_MS = 480; // keep in sync with HamburgerMenu
@@ -60,8 +61,33 @@ export default function OverlayMenuHeader({ navItems, isScrolled, scrollProgress
           className="relative flex items-center transition-all duration-500 ease-out"
           style={{ height: `${headerHeight}px` }}
         >
+          {/* Mobile: show Instagram in header */}
+          <div className="mr-auto lg:hidden relative z-[80]">
+            <Link
+              href="https://www.instagram.com/fairfaxinteriors"
+              aria-label="Open Fairfax Interiors on Instagram"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center text-[var(--brand-dark)] transition-opacity duration-200 hover:opacity-80"
+              title="Instagram"
+            >
+              <FaInstagram className="h-10 w-10" />
+            </Link>
+          </div>
           <div className="mr-auto hidden lg:block relative z-[80]">
-            <Button href="/contact">Contact</Button>
+            <div className="flex items-center gap-3">
+              <Link
+                href="https://www.instagram.com/fairfaxinteriors"
+                aria-label="Open Fairfax Interiors on Instagram"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center text-[var(--brand-dark)] transition-opacity duration-200 hover:opacity-80"
+                title="Instagram"
+              >
+                <FaInstagram className="h-10 w-10" />
+              </Link>
+              <Button href="/contact">Contact</Button>
+            </div>
           </div>
           <Link
             href="/"
