@@ -180,7 +180,7 @@ export default function Home() {
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-8 sm:gap-20">
             <Button
-              href="/under-construction"
+              href="/coming-soon"
               className="!w-[310px] !justify-center !px-0 !py-3 !text-[1.2rem] sm:!text-[1.55rem]"
             >
               LEARN MORE

@@ -100,15 +100,15 @@ export default function HamburgerMenu({ open: controlledOpen, onToggle, items, p
           }}
         >
           <div
-            className="px-4 sm:px-6 pt-14 sm:pt-24 pb-10 sm:pb-16 text-center flex min-h-screen flex-col items-center"
+            className="px-4 sm:px-6 pt-10 sm:pt-24 pb-8 sm:pb-16 text-center flex min-h-screen flex-col items-center"
             style={{ color: panelTextColor ?? "var(--brand-light)" }}
           >
-            <nav className="flex w-full flex-col items-center gap-0 text-3xl sm:text-4xl tracking-wide font-semibold">
+            <nav className="flex w-full flex-col items-center gap-0 text-2xl sm:text-4xl tracking-wide font-semibold">
               {reorderedItems.map(({ href, label }, index) => (
                 <div key={`${href}-${label}-${index}`} className="w-full max-w-sm">
                   <NavLink
                     href={href}
-                    className={`opacity-80 hover:opacity-90 ${index === 0 ? "mt-16" : ""} ${
+                    className={`opacity-80 hover:opacity-90 ${index === 0 ? "mt-12" : ""} ${
                       animateItems ? "menu-item-fade" : "menu-item-hidden"
                     }`}
                     onClick={handleItemClick}
@@ -117,16 +117,16 @@ export default function HamburgerMenu({ open: controlledOpen, onToggle, items, p
                     {label}
                   </NavLink>
                   {index < reorderedItems.length - 1 && (
-                    <span className="my-5 sm:my-6 block h-px w-full bg-gradient-to-r from-transparent via-current/25 to-transparent" />
+                    <span className="my-4 sm:my-6 block h-px w-full bg-gradient-to-r from-transparent via-current/25 to-transparent" />
                   )}
                 </div>
               ))}
             </nav>
             <div
-              className={`mt-auto w-full pt-12 sm:pt-16 lg:hidden ${animateItems ? "menu-item-fade" : "menu-item-hidden"}`}
+              className={`mt-auto w-full pt-6 sm:pt-16 lg:hidden ${animateItems ? "menu-item-fade" : "menu-item-hidden"} pb-[calc(env(safe-area-inset-bottom)+0.5rem)]`}
               style={animateItems ? { animationDelay: `${items.length * 120}ms` } : undefined}
             >
-              <div className="mb-6 flex justify-center">
+              <div className="mb-5 flex justify-center">
                 <Link
                   href="https://www.instagram.com/fairfaxinteriors"
                   aria-label="Open Fairfax Interiors on Instagram"
@@ -136,13 +136,13 @@ export default function HamburgerMenu({ open: controlledOpen, onToggle, items, p
                   title="Instagram"
                   onClick={handleItemClick}
                 >
-                  <FaInstagram className="h-10 w-10" />
+                  <FaInstagram className="h-8 w-8" />
                 </Link>
               </div>
               <Button
                 href="/contact"
                 onClick={handleItemClick}
-                className="flex w-full max-w-sm mx-auto justify-center px-6 py-3 text-lg tracking-[0.2em] sm:text-xl"
+                className="flex w-full max-w-sm mx-auto justify-center px-6 py-2.5 text-lg tracking-[0.18em] sm:py-3 sm:text-xl"
               >
                 Contact
               </Button>
