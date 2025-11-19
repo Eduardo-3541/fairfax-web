@@ -25,14 +25,11 @@ const ACTIVE_HEADER_VARIANT = (process.env.NEXT_PUBLIC_HEADER_VARIANT as HeaderV
 const HeaderComponent = HEADER_VARIANTS[ACTIVE_HEADER_VARIANT] ?? HEADER_VARIANTS.inline;
 
 const NAV_ITEMS: NavItem[] = [
-  { href: "/", label: "HOME" },
-  { href: "under-construction", label: "PROCESS" },
-  { href: "under-construction", label: "ABOUT" },
-  { href: "under-construction", label: "INTERIORS" },
-  { href: "under-construction", label: "UPHOLSTERY" },
-  { href: "under-construction", label: "SOFT FURNISHINGS" },
-  { href: "under-construction", label: "SERVICES" },
-
+  { href: "about", label: "ABOUT" },
+  { href: "coming-soon", label: "PROJECTS" },
+  { href: "coming-soon", label: "UPHOLSTERY" },
+  { href: "coming-soon", label: "SOFT FURNISHINGS" },
+  { href: "coming-soon", label: "SERVICES" },
 ];
 
 export default function Header() {  
@@ -93,7 +90,7 @@ export default function Header() {
   }, [headerHeight]);
 
   const sharedNavProps = useMemo<Omit<HeaderSharedProps, "isScrolled" | "scrollProgress">>(() => {
-    const contactItem = NAV_ITEMS.find((item) => item.href === "under-construction");
+    const contactItem = NAV_ITEMS.find((item) => item.href === "coming-soon");
     const primaryNavItems = contactItem
       ? NAV_ITEMS.filter((item) => item.href !== contactItem.href)
       : NAV_ITEMS;

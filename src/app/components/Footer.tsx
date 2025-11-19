@@ -5,12 +5,12 @@ import Logo from "./icons/logoinline";
 
 const footerNav = [
   { href: "/", label: "Home" },
-  { href: "/under-construction", label: "Interiors" },
-  { href: "/under-construction", label: "About" },
-  { href: "/under-construction", label: "Upholstery" },
-  { href: "/under-construction", label: "Process" },
-  { href: "/under-construction", label: "Soft Furnishings" },
-  { href: "/under-construction", label: "Services" },
+  { href: "/coming-soon", label: "Interiors" },
+  { href: "/coming-soon", label: "About" },
+  { href: "/coming-soon", label: "Upholstery" },
+  { href: "/coming-soon", label: "Process" },
+  { href: "/coming-soon", label: "Soft Furnishings" },
+  { href: "/coming-soon", label: "Services" },
   { href: "/contact", label: "Contact" },
 ];
 

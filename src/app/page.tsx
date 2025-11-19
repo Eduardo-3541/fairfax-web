@@ -18,29 +18,6 @@ export default function Home() {
     priority?: boolean;
   };
 
-  // Showcase cards to display above Featured Projects
-  const showcaseItems: ShowcaseItem[] = [
-    {
-      key: "interiors",
-      text: "INTERIORS",
-      imageSrc: "/images/projects.avif",
-      imageAlt: "Curated Fairfax Interiors project montage",
-      priority: true,
-    },
-    {
-      key: "soft-furnishings",
-      text: "SOFT FURNISHINGS",
-      imageSrc: "/images/process.avif",
-      imageAlt: "Fairfax Interiors design process moodboard",
-    },
-    {
-      key: "upholstery",
-      text: "UPHOLSTERY",
-      imageSrc: "/images/main.avif",
-      imageAlt: "Detail of bespoke Fairfax Interiors upholstery",
-    },
-  ];
-
   const featuredProjects: (ShowcaseItem & { location?: string })[] = [
     {
       key: "cotswolds-millhouse",
@@ -53,14 +30,14 @@ export default function Home() {
       key: "old-vicarage",
       text: "Old Vicarage",
       location: "Cotswolds, Gloucestershire",
-      imageSrc: "/images/process.avif",
+      imageSrc: "/images/main.avif",
       imageAlt: "",
     },
     {
       key: "cotswolds-cottage",
       text: "Cotswolds Cottage",
       location: "Cotswolds, Oxfordshire",
-      imageSrc: "/images/main.avif",
+      imageSrc: "/images/process.avif",
       imageAlt: "",
     },
   ];
@@ -77,7 +54,8 @@ export default function Home() {
   const variantCardClasses: Record<"grid" | "featured", string> = {
     // Force equal heights across variants to avoid visual mismatch
     grid: "min-h-[560px] p-10 sm:min-h-[560px] sm:p-10 lg:min-h-[560px] lg:p-12",
-    featured: "min-h-[560px] p-10 sm:min-h-[560px] sm:p-10 lg:min-h-[560px] lg:p-12",
+    // Make featured cards shorter and tighter for the two-item row
+    featured: "min-h-[340px] p-6 sm:min-h-[340px] sm:p-6 lg:min-h-[340px] lg:p-8",
   };
   const variantTitleClasses: Record<"grid" | "featured", string> = {
     grid: "text-3xl sm:text-4xl lg:text-5xl",
@@ -85,12 +63,13 @@ export default function Home() {
   };
   const variantTitleSpacing: Record<"grid" | "featured", string> = {
     grid: "mt-7 sm:mt-9 lg:mt-12",
-    featured: "mt-9",
+    featured: "mt-6",
   };
   const variantImageWrapperClasses: Record<"grid" | "featured", string> = {
-    // Enforce true 2:3 (width:height) vertical aspect ratio
+    // Grid cards remain 2:3 unless needed elsewhere
     grid: "relative w-full aspect-[2/3]",
-    featured: "relative w-full aspect-[2/3]",
+    // Featured tiles (Soft Furnishings, Upholstery) now 5:6 (W:H)
+    featured: "relative w-full aspect-[5/6]",
   };
 
 
@@ -121,12 +100,20 @@ export default function Home() {
         <div
           className={`relative z-10 ${variantImageWrapperClasses[variant]} ${imageWrapperClassName}`}
         >
-          <div className="absolute inset-0 overflow-hidden">
+          <div
+            className={`absolute inset-0 overflow-hidden ${
+              variant === "featured"
+                ? "transform-gpu scale-[0.88] transition-transform duration-700 ease-out group-hover:scale-[0.92]"
+                : ""
+            }`}
+          >
             <Image
               src={item.imageSrc}
               alt={item.imageAlt}
               fill
-              className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+              className={`object-cover object-center transition-transform duration-700 ease-out ${
+                variant === "featured" ? "group-hover:scale-[1.02]" : "group-hover:scale-[1.05]"
+              }`}
               sizes={imageSizes}
               quality={90}
               priority={variant === "grid" && Boolean(item.priority)}
@@ -170,10 +157,7 @@ export default function Home() {
       <FadeSection as="section" className="relative overflow-hidden bg-[var(--brand-light)] px-4 sm:px-6 pt-20 sm:pt-24 pb-14 sm:pb-16" disableExitFade>
         <div className="pointer-events-none absolute inset-0 z-0" />
         <div className="relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center gap-6 sm:gap-8 text-center text-[var(--brand-dark)]">
-          <h2 className="text-[clamp(2rem,7vw,4.2rem)] tracking-[0.18em] uppercase">
-            Designing <em>timeless</em> living.
-          </h2>
-          <p className="text-base sm:text-[1.1rem] font-regular leading-relaxed opacity-80">
+          <p className="text-base sm:text-[1.3rem] font-regular leading-relaxed opacity-80">
             For more than three decades, Fairfax Interiors has been creating beautiful, bespoke interiors across the UK.
             Whether transforming a grand country house or refining a modern city apartment, we combine design excellence,
             trusted craftsmanship, and a commitment to making every project an inspiring, stress-free experience.
@@ -191,27 +175,21 @@ export default function Home() {
           </div>
         </div>
       </FadeSection>
+
       
-      {/* Duplicated section placed above current Featured Projects */}
+      
       <FadeSection as="section" className="bg-[var(--brand-light)] px-4 sm:px-8 pb-20 md:px-16" disableExitFade>
-        <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-10 text-[var(--brand-dark)]">
-          <div className="grid gap-12 sm:gap-14 pb-8 pt-3 md:grid-cols-2 lg:grid-cols-3">
-            {/* Explicit order: Interiors, Soft Furnishings, Upholstery */}
-            <Link href="/under-construction" className="contents" key="interiors-dup">
-              <ShowcaseCard
-                item={{ key: "interiors-dup", text: "INTERIORS", imageSrc: "/images/projects.avif", imageAlt: "Curated Fairfax Interiors project montage", priority: true }}
-                variant="featured"
-              />
-            </Link>
-            <Link href="/under-construction" className="contents" key="soft-furnishings-dup">
+        <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-10 text-[var(--brand-dark)]">
+          <div className="grid gap-14 sm:gap-16 lg:gap-y-20 lg:gap-x-40 xl:gap-x-52 pb-8 pt-3 grid-cols-1 sm:grid-cols-2">
+            <Link href="/coming-soon" className="contents" key="soft-furnishings-dup">
               <ShowcaseCard
                 item={{ key: "soft-furnishings-dup", text: "SOFT FURNISHINGS", imageSrc: "/images/process.avif", imageAlt: "Fairfax Interiors design process moodboard" }}
                 variant="featured"
               />
             </Link>
-            <Link href="/under-construction" className="contents" key="upholstery-dup">
+            <Link href="/coming-soon" className="contents" key="upholstery-dup">
               <ShowcaseCard
-                item={{ key: "upholstery-dup", text: "UPHOLSTERY", imageSrc: "/images/main.avif", imageAlt: "Detail of bespoke Fairfax Interiors upholstery" }}
+                item={{ key: "upholstery-dup", text: "UPHOLSTERY", imageSrc: "/images/projects.avif", imageAlt: "Detail of bespoke Fairfax Interiors upholstery" }}
                 variant="featured"
               />
             </Link>
@@ -228,7 +206,7 @@ export default function Home() {
         <FeaturedProjectsSplit items={featuredProjects} />
         <div className="mt-4 flex flex-wrap items-center justify-center gap-8 sm:gap-16">
           <Button
-            href="/under-construction"
+            href="/coming-soon"
             className="!w-[310px] !justify-center !px-0 !py-3 !text-[1.2rem] sm:!text-[1.55rem] !text-[var(--brand-dark)] hover:!text-[var(--brand-light)] hover:!bg-[var(--brand-dark)]"
           >
             VIEW PROJECTS
@@ -258,7 +236,7 @@ export default function Home() {
             <Button href="/contact" className="!w-[310px] !justify-center !px-0 !py-3 !text-[1.2rem] sm:!text-[1.55rem]">
               CONTACT US
             </Button>
-            <Button href="/under-construction" className="!w-[310px] !justify-center !px-0 !py-3 !text-[1.2rem] sm:!text-[1.55rem]">
+            <Button href="/coming-soon" className="!w-[310px] !justify-center !px-0 !py-3 !text-[1.2rem] sm:!text-[1.55rem]">
               OUR SERVICES
             </Button>
           </div>
@@ -337,7 +315,7 @@ function FeaturedProjectsSplit({ items }: FeaturedProjectsSplitProps) {
                     <span className="pointer-events-none absolute inset-x-0 -top-px h-[2px] bg-gradient-to-r from-transparent via-[var(--brand-light)]/55 to-transparent" />
                   )}
                   <Link
-                    href="/under-construction"
+                    href="/coming-soon"
                     onMouseEnter={() => setHoveredIndex(index)}
                     onFocus={() => setHoveredIndex(index)}
                     className={`group relative flex w-full items-center justify-center gap-8 py-9 sm:py-12 text-center transition-colors ${

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import type { EmblaOptionsType } from "embla-carousel";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 type InstagramSlide = {
   id: string;
@@ -129,21 +130,22 @@ export default function InstagramCarousel({ options }: { options?: EmblaOptionsT
           aria-label="Previous"
           onClick={scrollPrev}
           disabled={!canScrollPrev}
-          className="rounded-full border border-[var(--brand-dark)]/25 px-4 py-2 text-sm tracking-[0.18em] text-[var(--brand-dark)] transition-colors duration-200 enabled:hover:bg-[var(--brand-dark)] enabled:hover:text-[var(--brand-light)] disabled:opacity-40"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--brand-dark)]/25 text-[var(--brand-dark)] transition-colors duration-200 enabled:hover:bg-[var(--brand-dark)] enabled:hover:text-[var(--brand-light)] disabled:opacity-40"
         >
-          Prev
+          <FaChevronLeft aria-hidden="true" />
+          <span className="sr-only">Previous</span>
         </button>
         <button
           type="button"
           aria-label="Next"
           onClick={scrollNext}
           disabled={!canScrollNext} 
-          className="rounded-full border border-[var(--brand-dark)]/25 px-4 py-2 text-sm tracking-[0.18em] text-[var(--brand-dark)] transition-colors duration-200 enabled:hover:bg-[var(--brand-dark)] enabled:hover:text-[var(--brand-light)] disabled:opacity-40"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--brand-dark)]/25 text-[var(--brand-dark)] transition-colors duration-200 enabled:hover:bg-[var(--brand-dark)] enabled:hover:text-[var(--brand-light)] disabled:opacity-40"
         >
-          Next
+          <FaChevronRight aria-hidden="true" />
+          <span className="sr-only">Next</span>
         </button>
       </div>
     </div>
   );
 }
-
