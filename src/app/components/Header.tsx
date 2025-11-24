@@ -7,7 +7,6 @@ import Link from "next/link";
 import LogoInline from "./icons/logoinline";
 import LogoSplit from "./icons/logosplit";
 import HamburgerMenu from "./HamburgerMenu";
-import Button from "./Button";
 
 export default function Header() {
   const headerRef = useRef<HTMLElement | null>(null);
@@ -56,22 +55,25 @@ export default function Header() {
   // Derived sizes for smooth animation
   // Keep padding consistent with desktop across all viewports
   const EXPANDED_PAD_Y = 26; // px
-  const COLLAPSED_PAD_Y = 22; // px
+  const COLLAPSED_PAD_Y = 16; // px
   // Lock header at expanded size when menu is open
   const effectiveProgress = menuOpen ? 0 : shrinkProgress;
   const padY = COLLAPSED_PAD_Y + (EXPANDED_PAD_Y - COLLAPSED_PAD_Y) * (1 - effectiveProgress);
 
   // Use different sizes for inline vs split logos (split is much larger)
   const EXPANDED_LOGO_H_INLINE = 30; // px
-  const COLLAPSED_LOGO_H_INLINE = 26; // px
+  const COLLAPSED_LOGO_H_INLINE = 24; // px
   const EXPANDED_LOGO_H_SPLIT = 44; // px (reduced for mobile)
-  const COLLAPSED_LOGO_H_SPLIT = 34; // px (reduced for mobile)
-  const logoHInline =
-    COLLAPSED_LOGO_H_INLINE + (EXPANDED_LOGO_H_INLINE - COLLAPSED_LOGO_H_INLINE) * (1 - effectiveProgress);
+  const COLLAPSED_LOGO_H_SPLIT = 32; // px (reduced for mobile)
+  // Keep inline logo at max layout size and scale visually to avoid pushing navs
+  const inlineScale =
+    1 -
+    effectiveProgress *
+      (1 - COLLAPSED_LOGO_H_INLINE / Math.max(1, EXPANDED_LOGO_H_INLINE));
   const logoHSplit =
     COLLAPSED_LOGO_H_SPLIT + (EXPANDED_LOGO_H_SPLIT - COLLAPSED_LOGO_H_SPLIT) * (1 - effectiveProgress);
-  // Render the split logo larger via CSS transform so it doesn't increase layout height
-  const splitScale = Math.max(1, logoHSplit / Math.max(1, logoHInline));
+  // Render split logo at its own height to avoid layout shift while scrolling
+  const splitScale = 1;
 
   const leftNav = [
     { href: "/", label: "Home" },
@@ -140,7 +142,12 @@ export default function Header() {
             {/* Inline (full) logo for mobile and very wide screens */}
             <LogoInline
               className="w-auto text-current [&_*]:fill-current hidden xl:block"
-              style={{ height: `${logoHInline}px`, transition: "height 140ms ease-out" }}
+              style={{
+                height: `${EXPANDED_LOGO_H_INLINE}px`,
+                transform: `scale(${inlineScale})`,
+                transformOrigin: "center center",
+                transition: "transform 140ms ease-out",
+              }}
               aria-hidden="true"
             />
             {/* Split logo for mobile through lg (scaled up without affecting header height) */}
@@ -148,10 +155,10 @@ export default function Header() {
               <LogoSplit
                 className="w-auto text-current [&_*]:fill-current block"
                 style={{
-                  height: `${logoHInline}px`,
+                  height: `${logoHSplit}px`,
                   transform: `scale(${splitScale})`,
                   transformOrigin: "center center",
-                  transition: "transform 140ms ease-out, height 140ms ease-out",
+                  transition: "height 140ms ease-out",
                 }}
                 aria-hidden="true"
               />
@@ -170,15 +177,9 @@ export default function Header() {
           </nav>
         </div>
 
-        {/* Mobile spacer to keep logo centered relative to hamburger width */}
-        <div className="md:hidden justify-self-end w-12 sm:w-14" aria-hidden="true" />
-      </div>
-      {/* Desktop-only Contact button pinned to the screen edge, not grouped with nav */}
-      <div className="hidden md:block absolute right-3 sm:right-4 md:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-50">
-        <Button href="/contact" className="!py-1.5 !px-5 !text-sm sm:!text-base tracking-[0.18em]">
-          Contact
-        </Button>
-      </div>
-    </header>
-  );
+      {/* Mobile spacer to keep logo centered relative to hamburger width */}
+      <div className="md:hidden justify-self-end w-12 sm:w-14" aria-hidden="true" />
+    </div>
+  </header>
+);
 }
