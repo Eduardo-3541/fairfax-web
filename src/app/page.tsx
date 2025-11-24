@@ -223,6 +223,9 @@ export default function Home() {
           <div className="text-center">
             <span className="mx-auto mb-4 block h-px w-full max-w-4xl bg-gradient-to-r from-transparent via-[var(--brand-dark)]/25 to-transparent" />
             <h3 className="mt-6 sm:mt-8 text-[clamp(1.6rem,3.6vw,2.8rem)] uppercase tracking-[0.28em]">Shop</h3>
+            <p className="mt-3 text-base sm:text-lg text-[var(--brand-dark)]/80 tracking-[0.06em]">
+              Discover bespoke soft furnishings and upholstery, curated to pair effortlessly with our interior schemes.
+            </p>
           </div>
           <div className="grid gap-14 sm:gap-16 lg:gap-y-20 lg:gap-x-40 xl:gap-x-52 pb-8 pt-3 grid-cols-1 sm:grid-cols-2">
             <Link href="/coming-soon" className="contents">

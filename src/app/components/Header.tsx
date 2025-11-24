@@ -121,26 +121,27 @@ export default function Header() {
       }}
     >
       <div
-        className="mx-auto w-full max-w-6xl grid grid-cols-[1fr_auto_1fr] items-center px-3 sm:px-4 md:px-5 lg:px-6 xl:px-8 sm:gap-x-6 md:gap-x-8 lg:gap-x-12 xl:gap-x-16"
+        className="relative mx-auto w-full max-w-6xl grid grid-cols-[1fr_auto_1fr] items-center px-3 sm:px-4 md:px-5 lg:px-6 xl:px-8"
         style={{ paddingTop: `${padY}px`, paddingBottom: `${padY}px`, transition: "padding 140ms ease-out" }}
       >
-        {/* Left column: mobile hamburger OR desktop left nav */}
-        <div className="flex items-center md:hidden">
-          <HamburgerMenu items={allNavForMobile} open={menuOpen} onToggle={setMenuOpen} />
+        {/* Left: mobile hamburger or left nav */}
+        <div className="flex items-center justify-start">
+          <div className="md:hidden">
+            <HamburgerMenu items={allNavForMobile} open={menuOpen} onToggle={setMenuOpen} />
+          </div>
+          <nav className="hidden md:flex items-center justify-end gap-4 md:gap-5 lg:gap-6 xl:gap-8">
+            {leftNav.map(({ href, label }) => (
+              <NavLink key={`${href}-${label}`} href={href} compact>
+                {label}
+              </NavLink>
+            ))}
+          </nav>
         </div>
-        <nav className="hidden md:flex items-center justify-end gap-4 md:gap-5 lg:gap-6 xl:gap-8">
-          {leftNav.map(({ href, label }) => (
-            <NavLink key={`${href}-${label}`} href={href} compact>
-              {label}
-            </NavLink>
-          ))}
-        </nav>
 
-        {/* Center column: perfectly centered logo, vertically aligned */}
-        <div className="justify-self-center px-3 sm:px-4 md:px-6 lg:px-8">
+        {/* Center: perfectly centered logo */}
+        <div className="flex justify-center px-3 sm:px-4 md:px-6 lg:px-8">
           <Link href="/" aria-label="Go to home" className="inline-block">
             <span className="sr-only">Fairfax Interiors</span>
-            {/* Inline (full) logo for mobile and very wide screens */}
             <LogoInline
               className="w-auto text-current [&_*]:fill-current hidden xl:block"
               style={{
@@ -151,7 +152,6 @@ export default function Header() {
               }}
               aria-hidden="true"
             />
-            {/* Split logo for mobile through lg (scaled up without affecting header height) */}
             <div className="block xl:hidden px-6 sm:px-8 md:px-10 lg:px-12">
               <LogoSplit
                 className="w-auto text-current [&_*]:fill-current block"
@@ -167,20 +167,18 @@ export default function Header() {
           </Link>
         </div>
 
-        {/* Right column: desktop right nav; mobile uses spacer */}
-        <div className="hidden md:flex items-center justify-start">
-          <nav className="flex items-center gap-4 md:gap-5 lg:gap-6 xl:gap-8">
+        {/* Right: nav; mobile spacer keeps logo centered */}
+        <div className="flex items-center justify-end">
+          <nav className="hidden md:flex items-center gap-4 md:gap-5 lg:gap-6 xl:gap-8">
             {rightNav.map(({ href, label }) => (
               <NavLink key={`${href}-${label}`} href={href} compact>
                 {label}
               </NavLink>
             ))}
           </nav>
+          <div className="md:hidden w-10 sm:w-12" aria-hidden="true" />
         </div>
-
-      {/* Mobile spacer to keep logo centered relative to hamburger width */}
-      <div className="md:hidden justify-self-end w-12 sm:w-14" aria-hidden="true" />
-    </div>
+      </div>
       {/* Desktop Contact button pinned to the right */}
       <div className="hidden md:block absolute right-3 sm:right-4 md:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-50">
         <Button href="/contact" className="!py-1.5 !px-5 !text-sm sm:!text-base tracking-[0.18em]">
