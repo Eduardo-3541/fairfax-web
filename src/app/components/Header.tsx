@@ -7,6 +7,7 @@ import Link from "next/link";
 import LogoInline from "./icons/logoinline";
 import LogoSplit from "./icons/logosplit";
 import HamburgerMenu from "./HamburgerMenu";
+import Button from "./Button";
 
 export default function Header() {
   const headerRef = useRef<HTMLElement | null>(null);
@@ -180,6 +181,12 @@ export default function Header() {
       {/* Mobile spacer to keep logo centered relative to hamburger width */}
       <div className="md:hidden justify-self-end w-12 sm:w-14" aria-hidden="true" />
     </div>
+      {/* Desktop Contact button pinned to the right */}
+      <div className="hidden md:block absolute right-3 sm:right-4 md:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-50">
+        <Button href="/contact" className="!py-1.5 !px-5 !text-sm sm:!text-base tracking-[0.18em]">
+          Contact
+        </Button>
+      </div>
   </header>
 );
 }

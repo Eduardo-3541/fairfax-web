@@ -23,22 +23,22 @@ export default function Home() {
       key: "cotswolds-millhouse",
       text: "Cotswolds Millhouse",
       location: "Cotswolds, Gloucestershire",
-      imageSrc: "/images/projects.avif",
-      imageAlt: "",
+      imageSrc: "/images/placeholder-coming-soon.svg",
+      imageAlt: "Project coming soon placeholder",
     },
     {
       key: "old-vicarage",
       text: "Old Vicarage",
       location: "Cotswolds, Gloucestershire",
-      imageSrc: "/images/main.avif",
-      imageAlt: "",
+      imageSrc: "/images/placeholder-coming-soon.svg",
+      imageAlt: "Project coming soon placeholder",
     },
     {
       key: "cotswolds-cottage",
       text: "Cotswolds Cottage",
       location: "Cotswolds, Oxfordshire",
-      imageSrc: "/images/process.avif",
-      imageAlt: "",
+      imageSrc: "/images/placeholder-coming-soon.svg",
+      imageAlt: "Project coming soon placeholder",
     },
   ];
 
@@ -50,7 +50,7 @@ export default function Home() {
   };
 
   const baseCardClasses =
-    "group relative flex flex-col justify-between overflow-hidden bg-[var(--brand-dark)] transition duration-500 ease-out hover:bg-[color:color-mix(in_srgb,var(--brand-dark)_88%,white_12%)]";
+    "group relative flex flex-col justify-between overflow-hidden rounded-xl bg-[var(--brand-dark)] transition duration-500 ease-out hover:bg-[color:color-mix(in_srgb,var(--brand-dark)_88%,white_12%)]";
   const variantCardClasses: Record<"grid" | "featured", string> = {
     // Force equal heights across variants to avoid visual mismatch
     grid: "min-h-[560px] p-10 sm:min-h-[560px] sm:p-10 lg:min-h-[560px] lg:p-12",
@@ -164,33 +164,11 @@ export default function Home() {
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-8 sm:gap-20">
             <Button
-              href="/coming-soon"
+              href="/about"
               className="!w-[310px] !justify-center !px-0 !py-3 !text-[1.2rem] sm:!text-[1.55rem]"
             >
               LEARN MORE
             </Button>
-          </div>
-          <div className="mt-8 w-full">
-            <span className="block h-px w-full bg-gradient-to-r from-transparent via-[var(--brand-dark)]/30 to-transparent" />
-          </div>
-        </div>
-      </FadeSection>
-
-      <FadeSection as="section" className="bg-[var(--brand-light)] px-4 sm:px-8 pb-20 md:px-16" disableExitFade>
-        <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-10 text-[var(--brand-dark)]">
-          <div className="grid gap-14 sm:gap-16 lg:gap-y-20 lg:gap-x-40 xl:gap-x-52 pb-8 pt-3 grid-cols-1 sm:grid-cols-2">
-            <Link href="/coming-soon" className="contents">
-              <ShowcaseCard
-                item={{ key: "soft-furnishings", text: "SOFT FURNISHINGS", imageSrc: "/images/process.avif", imageAlt: "Fairfax Interiors design process moodboard" }}
-                variant="featured"
-              />
-            </Link>
-            <Link href="/coming-soon" className="contents">
-              <ShowcaseCard
-                item={{ key: "upholstery", text: "UPHOLSTERY", imageSrc: "/images/projects.avif", imageAlt: "Detail of bespoke Fairfax Interiors upholstery" }}
-                variant="featured"
-              />
-            </Link>
           </div>
         </div>
       </FadeSection>
@@ -240,6 +218,28 @@ export default function Home() {
           </div>
         </div>
       </FadeSection>
+      <FadeSection as="section" className="bg-[var(--brand-light)] px-4 sm:px-8 pb-20 md:px-16" disableExitFade>
+        <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-10 text-[var(--brand-dark)]">
+          <div className="text-center">
+            <span className="mx-auto mb-4 block h-px w-full max-w-4xl bg-gradient-to-r from-transparent via-[var(--brand-dark)]/25 to-transparent" />
+            <h3 className="mt-6 sm:mt-8 text-[clamp(1.6rem,3.6vw,2.8rem)] uppercase tracking-[0.28em]">Shop</h3>
+          </div>
+          <div className="grid gap-14 sm:gap-16 lg:gap-y-20 lg:gap-x-40 xl:gap-x-52 pb-8 pt-3 grid-cols-1 sm:grid-cols-2">
+            <Link href="/coming-soon" className="contents">
+              <ShowcaseCard
+                item={{ key: "soft-furnishings", text: "SOFT FURNISHINGS", imageSrc: "/images/process.avif", imageAlt: "Fairfax Interiors design process moodboard" }}
+                variant="featured"
+              />
+            </Link>
+            <Link href="/coming-soon" className="contents">
+              <ShowcaseCard
+                item={{ key: "upholstery", text: "UPHOLSTERY", imageSrc: "/images/projects.avif", imageAlt: "Detail of bespoke Fairfax Interiors upholstery" }}
+                variant="featured"
+              />
+            </Link>
+          </div>
+        </div>
+      </FadeSection>
       <FadeSection as="section" className="bg-[var(--brand-light)] px-6 pb-20 md:px-16" disableExitFade>
         <div className="mx-auto w-full max-w-7xl">
           <span className="block h-px w-full bg-gradient-to-r from-transparent via-[var(--brand-dark)]/25 to-transparent" />
@@ -279,31 +279,17 @@ function FeaturedProjectsSplit({ items }: FeaturedProjectsSplitProps) {
           <h3 className="text-[clamp(1.6rem,3.6vw,2.8rem)] uppercase tracking-[0.28em]">FEATURED PROJECTS</h3>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2">
-          {/* Left: Active image */}
-          <div className="relative h-[420px] sm:h-[520px] md:h-[640px] bg-[var(--brand-dark)] overflow-hidden rounded-xl md:rounded-l-xl md:rounded-r-none">
-            {active && (
-              <Image
-                src={active.imageSrc}
-                alt={active.imageAlt}
-                fill
-                sizes="(min-width: 1024px) 50vw, 100vw"
-                quality={90}
-                className="object-cover"
-                priority
-              />
-            )}
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-black/10 to-transparent" />
-            <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between">
-              <span className="text-white/95 tracking-[0.22em] text-xl sm:text-2xl uppercase">
-                {active?.text}
-              </span>
-            </div>
+          {/* Left: Coming soon placeholder */}
+          <div className="relative h-[420px] sm:h-[520px] md:h-[640px] bg-[var(--brand-dark)] overflow-hidden rounded-xl md:rounded-l-xl md:rounded-r-none flex items-center justify-center">
+            <span className="text-[var(--brand-light)] text-2xl sm:text-3xl tracking-[0.28em] uppercase">
+              Coming Soon
+            </span>
           </div>
 
           {/* Right: List of projects */}
           <div className="bg-[var(--brand-dark)] text-[var(--brand-light)] px-6 sm:px-12 py-10 sm:py-14 flex items-center relative overflow-hidden rounded-xl md:rounded-r-xl md:rounded-l-none">
-            {/* subtle texture/light to add depth */}
-            <div className="pointer-events-none absolute inset-0 opacity-[0.07] bg-[radial-gradient(1200px_500px_at_-10%_-10%,#fff,transparent_60%),radial-gradient(900px_400px_at_110%_110%,#fff,transparent_60%)]" />
+            {/* vertical separator between placeholder and list */}
+            <span className="pointer-events-none absolute left-0 top-8 bottom-8 w-px bg-gradient-to-b from-transparent via-[var(--brand-light)]/35 to-transparent" />
             <h3 className="sr-only">Featured Projects</h3>
             <ul className="w-full relative z-10">
               {items.map((item, index) => (

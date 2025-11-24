@@ -9,7 +9,7 @@ export default function TermsAndConditionsPage() {
     <main className="bg-[var(--brand-light)] text-[var(--brand-dark)]">
       <section className="mx-auto w-full max-w-4xl px-6 py-16 md:px-12 lg:px-0">
         <header className="mb-12 text-center">
-          <h1 className="text-[clamp(2.4rem,4vw,3.6rem)] tracking-[0.24em] uppercase">
+          <h1 className="text-[clamp(1.85rem,3vw,2.8rem)] tracking-[0.24em] uppercase">
             Website Terms & Conditions
           </h1>
           <p className="mt-6 text-base leading-relaxed text-[var(--brand-dark)]/80">
@@ -23,9 +23,7 @@ export default function TermsAndConditionsPage() {
           <section>
             <h2 className="text-xl font-semibold tracking-[0.18em] uppercase">1. About Us</h2>
             <p className="mt-4">
-              The Site is operated by Fairfax Interiors Ltd (“Fairfax Interiors”, “we”, “us”, “our”), a company registered
-              in England and Wales and trading from The Chantry, Stratford Road, Wroxton, Oxfordshire, OX15 6QS. You can
-              contact us at{" "}
+              The Site is operated by Fairfax Interiors. You can contact us at{" "}
               <a className="underline underline-offset-4" href="mailto:info@fairfaxinteriors.com">
                 info@fairfaxinteriors.com
               </a>{" "}
@@ -143,9 +141,9 @@ export default function TermsAndConditionsPage() {
               <a className="underline underline-offset-4" href="mailto:info@fairfaxinteriors.com">
                 info@fairfaxinteriors.com
               </a>{" "}
-              or write to Fairfax Interiors Ltd, The Chantry, Stratford Road, Wroxton, Oxfordshire, OX15 6QS.
+              or write to Fairfax Interiors, The Chantry, Stratford Road, Wroxton, Oxfordshire, OX15 6QS.
             </p>
-            <p className="mt-4 text-sm text-[var(--brand-dark)]/70">Last updated: 30 October 2025.</p>
+            <p className="mt-4 text-sm text-[var(--brand-dark)]/70">Last updated: 24 November 2025.</p>
           </section>
         </article>
       </section>
