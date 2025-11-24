@@ -7,6 +7,7 @@ import NavLink from "./NavLink";
 import type { NavItem } from "./headerTypes";
 import Button from "./Button";
 import { FaInstagram } from "react-icons/fa";
+// Panel uses the header's existing logo; none duplicated here
 
 type Props = {
   open?: boolean;
@@ -57,12 +58,17 @@ export default function HamburgerMenu({ open: controlledOpen, onToggle, items, p
     else setUncontrolledOpen(false);
   }, [pathname, open, onToggle]);
 
+  // Remove Contact from the list (it appears as a button at the bottom)
+  const menuItems = items.filter(
+    (i) => i.label.toLowerCase() !== "contact" && i.href.toLowerCase() !== "/contact"
+  );
+
   // Reorder: place "Services" directly after "About" when both exist
   const reorderedItems = (() => {
-    const aboutIndex = items.findIndex((i) => i.label.toLowerCase() === "about");
-    const servicesIndex = items.findIndex((i) => i.label.toLowerCase() === "services");
-    if (aboutIndex === -1 || servicesIndex === -1 || servicesIndex === aboutIndex + 1) return items;
-    const copy = items.slice();
+    const aboutIndex = menuItems.findIndex((i) => i.label.toLowerCase() === "about");
+    const servicesIndex = menuItems.findIndex((i) => i.label.toLowerCase() === "services");
+    if (aboutIndex === -1 || servicesIndex === -1 || servicesIndex === aboutIndex + 1) return menuItems;
+    const copy = menuItems.slice();
     const [services] = copy.splice(servicesIndex, 1);
     copy.splice(Math.min(aboutIndex + 1, copy.length), 0, services);
     return copy;
@@ -75,22 +81,36 @@ export default function HamburgerMenu({ open: controlledOpen, onToggle, items, p
         aria-label={open ? "Close menu" : "Open menu"}
         aria-expanded={open}
         onClick={toggle}
-        className="group relative z-[60] flex h-10 w-12 sm:w-14 items-center justify-end pr-1 sm:pr-2"
+        className="group relative z-[60] flex h-6 w-12 sm:w-14 items-center justify-end pr-1 sm:pr-2"
       >
-        <span className="absolute right-0 block h-[2px] w-10 sm:w-12 bg-current transition-transform duration-300 -translate-y-[0.45rem]" />
-        <span className="absolute right-0 block h-[2px] w-10 sm:w-12 bg-current transition-opacity duration-300" />
-        <span className="absolute right-0 block h-[2px] w-10 sm:w-12 bg-current transition-transform duration-300 translate-y-[0.45rem]" />
+        <span
+          className={`absolute right-0 block h-[2px] w-10 sm:w-12 bg-current rounded transition-all duration-300 ease-out origin-center ${
+            open ? "translate-y-0 rotate-45 scale-x-90" : "-translate-y-[0.45rem] rotate-0 scale-x-100"
+          }`}
+        />
+        <span
+          className={`absolute right-0 block h-[2px] w-10 sm:w-12 bg-current rounded transition-all duration-300 ease-out origin-center ${
+            open ? "opacity-0 scale-x-0" : "opacity-100 scale-x-100"
+          }`}
+        />
+        <span
+          className={`absolute right-0 block h-[2px] w-10 sm:w-12 bg-current rounded transition-all duration-300 ease-out origin-center ${
+            open ? "translate-y-0 -rotate-45 scale-x-90" : "translate-y-[0.45rem] rotate-0 scale-x-100"
+          }`}
+        />
       </button>
 
       <div
-        className={`fixed left-0 right-0 top-0 z-40 origin-top overflow-hidden transition-[max-height] ${
+        className={`fixed left-0 right-0 z-50 origin-top overflow-hidden transition-[max-height] ${
           open ? "max-h-screen" : "max-h-0"
         }`}
         style={{
+          top: "var(--header-height, 0px)",
+          maxHeight: open ? "calc(100vh - var(--header-height, 0px))" : "0px",
           willChange: "max-height",
           transitionTimingFunction: PANEL_EASING,
           transitionDuration: `${open ? PANEL_DURATION_OPEN_MS : PANEL_DURATION_CLOSE_MS}ms`,
-          boxShadow: open ? "0 22px 38px rgba(0, 0, 0, 0.28)" : "none",
+          boxShadow: "none",
         }}
       >
         <div
@@ -100,7 +120,7 @@ export default function HamburgerMenu({ open: controlledOpen, onToggle, items, p
           }}
         >
           <div
-            className="px-4 sm:px-6 pt-10 sm:pt-24 pb-8 sm:pb-16 text-center flex min-h-screen flex-col items-center"
+            className="px-4 sm:px-6 pt-6 sm:pt-8 pb-8 sm:pb-16 text-center flex min-h-[calc(100vh-var(--header-height,0px))] flex-col items-center"
             style={{ color: panelTextColor ?? "var(--brand-light)" }}
           >
             <nav className="flex w-full flex-col items-center gap-0 text-2xl sm:text-4xl tracking-wide font-semibold">
@@ -124,7 +144,7 @@ export default function HamburgerMenu({ open: controlledOpen, onToggle, items, p
             </nav>
             <div
               className={`mt-auto w-full pt-6 sm:pt-16 lg:hidden ${animateItems ? "menu-item-fade" : "menu-item-hidden"} pb-[calc(env(safe-area-inset-bottom)+0.5rem)]`}
-              style={animateItems ? { animationDelay: `${items.length * 120}ms` } : undefined}
+              style={animateItems ? { animationDelay: `${reorderedItems.length * 120}ms` } : undefined}
             >
               <div className="mb-5 flex justify-center">
                 <Link

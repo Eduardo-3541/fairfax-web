@@ -79,7 +79,7 @@ export default function FadeSection<T extends ElementType = "section">({
   return (
     <Component
       ref={setRef}
-      className={`transition-all duration-700 ease-out will-change-[opacity,transform] ${stateClasses} ${className}`}
+      className={`transition-[opacity,transform] duration-700 ease-out will-change-[opacity,transform] ${stateClasses} ${className}`}
       {...(rest as ComponentPropsWithoutRef<T>)}
     >
       {children}

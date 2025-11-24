@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Fraunces, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
@@ -30,10 +31,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${fraunces.variable} ${geistMono.variable} flex min-h-screen flex-col antialiased`}
-        style={{ paddingTop: "var(--header-height, 0px)" }}
-      >
+      <head>
+        {process.env.NODE_ENV === "development" && (
+          <Script
+            src="//unpkg.com/react-grab/dist/index.global.js"
+            crossOrigin="anonymous"
+            strategy="beforeInteractive"
+            data-enabled="true"
+          />
+        )}
+      </head>
+      <body className={`${fraunces.variable} ${geistMono.variable} flex min-h-screen flex-col antialiased`}>
         <Header />
         <div className="flex flex-1 flex-col">
           {children}

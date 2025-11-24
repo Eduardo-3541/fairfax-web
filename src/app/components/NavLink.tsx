@@ -6,13 +6,17 @@ import type { CSSProperties, PropsWithChildren } from "react";
 type NavLinkProps = PropsWithChildren<{
   className?: string;
   style?: CSSProperties;
+  compact?: boolean; // use tighter padding/weight for dense header layouts
 }> & LinkProps;
 
-export default function NavLink({ href, children, className, style, ...rest }: NavLinkProps) {
+export default function NavLink({ href, children, className, style, compact = false, ...rest }: NavLinkProps) {
+  const basePadding = compact ? "px-0" : "px-6";
+  const baseWeight = compact ? "font-normal" : "font-semibold";
+  const baseTracking = compact ? "tracking-[0.12em]" : "tracking-[0.18em]";
   return (
     <Link
       href={href}
-      className={`group relative inline-flex items-center justify-center px-6 font-semibold uppercase tracking-[0.18em] transition-opacity duration-200 hover:opacity-85 ${
+      className={`group relative inline-flex items-center justify-center ${basePadding} ${baseWeight} uppercase ${baseTracking} transition-opacity duration-200 hover:opacity-85 ${
         className ?? ""
       }`}
       style={style}

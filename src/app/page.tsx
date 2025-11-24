@@ -141,7 +141,7 @@ export default function Home() {
       <FadeSection
         as="section"
         className="relative w-full flex-shrink-0 overflow-hidden"
-        style={{ minHeight: "calc(100dvh - var(--header-height, 0px))" }}
+        style={{ minHeight: "calc(100dvh - var(--header-initial-height, 0px))" }}
         disableExitFade
       >
         <Image
@@ -149,7 +149,7 @@ export default function Home() {
           alt="Fairfax Interiors main visual"
           fill
           priority
-          className="object-cover object-[90%_40%]"
+          className="object-cover object-center sm:object-[90%_40%]"
           sizes="100vw"
           quality={90}
         />
@@ -176,20 +176,18 @@ export default function Home() {
         </div>
       </FadeSection>
 
-      
-      
       <FadeSection as="section" className="bg-[var(--brand-light)] px-4 sm:px-8 pb-20 md:px-16" disableExitFade>
         <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-10 text-[var(--brand-dark)]">
           <div className="grid gap-14 sm:gap-16 lg:gap-y-20 lg:gap-x-40 xl:gap-x-52 pb-8 pt-3 grid-cols-1 sm:grid-cols-2">
-            <Link href="/coming-soon" className="contents" key="soft-furnishings-dup">
+            <Link href="/coming-soon" className="contents">
               <ShowcaseCard
-                item={{ key: "soft-furnishings-dup", text: "SOFT FURNISHINGS", imageSrc: "/images/process.avif", imageAlt: "Fairfax Interiors design process moodboard" }}
+                item={{ key: "soft-furnishings", text: "SOFT FURNISHINGS", imageSrc: "/images/process.avif", imageAlt: "Fairfax Interiors design process moodboard" }}
                 variant="featured"
               />
             </Link>
-            <Link href="/coming-soon" className="contents" key="upholstery-dup">
+            <Link href="/coming-soon" className="contents">
               <ShowcaseCard
-                item={{ key: "upholstery-dup", text: "UPHOLSTERY", imageSrc: "/images/projects.avif", imageAlt: "Detail of bespoke Fairfax Interiors upholstery" }}
+                item={{ key: "upholstery", text: "UPHOLSTERY", imageSrc: "/images/projects.avif", imageAlt: "Detail of bespoke Fairfax Interiors upholstery" }}
                 variant="featured"
               />
             </Link>
@@ -282,7 +280,7 @@ function FeaturedProjectsSplit({ items }: FeaturedProjectsSplitProps) {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2">
           {/* Left: Active image */}
-          <div className="relative h-[420px] sm:h-[520px] md:h-[640px] bg-[var(--brand-dark)]">
+          <div className="relative h-[420px] sm:h-[520px] md:h-[640px] bg-[var(--brand-dark)] overflow-hidden rounded-xl md:rounded-l-xl md:rounded-r-none">
             {active && (
               <Image
                 src={active.imageSrc}
@@ -303,7 +301,7 @@ function FeaturedProjectsSplit({ items }: FeaturedProjectsSplitProps) {
           </div>
 
           {/* Right: List of projects */}
-          <div className="bg-[var(--brand-dark)] text-[var(--brand-light)] px-6 sm:px-12 py-10 sm:py-14 flex items-center relative overflow-hidden">
+          <div className="bg-[var(--brand-dark)] text-[var(--brand-light)] px-6 sm:px-12 py-10 sm:py-14 flex items-center relative overflow-hidden rounded-xl md:rounded-r-xl md:rounded-l-none">
             {/* subtle texture/light to add depth */}
             <div className="pointer-events-none absolute inset-0 opacity-[0.07] bg-[radial-gradient(1200px_500px_at_-10%_-10%,#fff,transparent_60%),radial-gradient(900px_400px_at_110%_110%,#fff,transparent_60%)]" />
             <h3 className="sr-only">Featured Projects</h3>

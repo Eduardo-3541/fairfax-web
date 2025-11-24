@@ -1,132 +1,184 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type ComponentType } from "react";
-import InlineNavHeader from "./headers/InlineNavHeader";
-import OverlayMenuHeader from "./headers/OverlayMenuHeader";
-import SplitNavHeader from "./headers/SplitNavHeader";
-import type { HeaderSharedProps, NavItem } from "./headerTypes";
+import { useEffect, useRef, useState } from "react";
+import NavLink from "./NavLink";
+import Link from "next/link";
+// Keep paths lowercase for case-sensitive deployments
+import LogoInline from "./icons/logoinline";
+import LogoSplit from "./icons/logosplit";
+import HamburgerMenu from "./HamburgerMenu";
+import Button from "./Button";
 
-type HeaderVariantsMap = {
-  inline: ComponentType<HeaderSharedProps>;
-  overlay: ComponentType<HeaderSharedProps>;
-  split: ComponentType<HeaderSharedProps>;
-};
+export default function Header() {
+  const headerRef = useRef<HTMLElement | null>(null);
+  const [shrinkProgress, setShrinkProgress] = useState(0); // 0 (expanded) -> 1 (collapsed)
+  // Header height should be consistent across viewports
+  const [menuOpen, setMenuOpen] = useState(false);
+  // Hold the dark header state slightly after menu closes for a seamless blend
+  const [headerDark, setHeaderDark] = useState(false);
 
-const HEADER_VARIANTS: HeaderVariantsMap = {
-  inline: InlineNavHeader,
-  overlay: OverlayMenuHeader,
-  split: SplitNavHeader,
-};
-
-type HeaderVariantKey = keyof HeaderVariantsMap;
-
-const ACTIVE_HEADER_VARIANT = (process.env.NEXT_PUBLIC_HEADER_VARIANT as HeaderVariantKey | undefined) ?? "overlay";
-
-const HeaderComponent = HEADER_VARIANTS[ACTIVE_HEADER_VARIANT] ?? HEADER_VARIANTS.inline;
-
-const NAV_ITEMS: NavItem[] = [
-  { href: "about", label: "ABOUT" },
-  { href: "coming-soon", label: "PROJECTS" },
-  { href: "coming-soon", label: "UPHOLSTERY" },
-  { href: "coming-soon", label: "SOFT FURNISHINGS" },
-  { href: "coming-soon", label: "SERVICES" },
-];
-
-export default function Header() {  
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const initialHeaderHeightRef = useRef<number | null>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [headerHeight, setHeaderHeight] = useState(0);
-
+  // Keep body padding in sync with header height
   useEffect(() => {
-    const element = wrapperRef.current;
-    if (!element) {
+    const updateVar = () => {
+      const el = headerRef.current;
+      if (!el) return;
+      const h = el.getBoundingClientRect().height;
+      document.documentElement.style.setProperty("--header-height", `${Math.round(h)}px`);
+    };
+    updateVar();
+    window.addEventListener("resize", updateVar);
+    return () => window.removeEventListener("resize", updateVar);
+  }, []);
+
+  // Also update the CSS variable when the header shrinks/expands on scroll or menu state changes
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    const h = el.getBoundingClientRect().height;
+    document.documentElement.style.setProperty("--header-height", `${Math.round(h)}px`);
+  }, [shrinkProgress, menuOpen]);
+
+  // Shrink header and logo smoothly on scroll
+  useEffect(() => {
+    const MAX_SCROLL = 120; // px of scroll to fully collapse
+    const onScroll = () => {
+      const y = Math.max(0, window.scrollY || 0);
+      const p = Math.min(1, y / MAX_SCROLL);
+      setShrinkProgress(p);
+    };
+    onScroll(); // initialize
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Removed breakpoint tracking: header height remains the same across viewports
+
+  // Derived sizes for smooth animation
+  // Keep padding consistent with desktop across all viewports
+  const EXPANDED_PAD_Y = 26; // px
+  const COLLAPSED_PAD_Y = 22; // px
+  // Lock header at expanded size when menu is open
+  const effectiveProgress = menuOpen ? 0 : shrinkProgress;
+  const padY = COLLAPSED_PAD_Y + (EXPANDED_PAD_Y - COLLAPSED_PAD_Y) * (1 - effectiveProgress);
+
+  // Use different sizes for inline vs split logos (split is much larger)
+  const EXPANDED_LOGO_H_INLINE = 30; // px
+  const COLLAPSED_LOGO_H_INLINE = 26; // px
+  const EXPANDED_LOGO_H_SPLIT = 44; // px (reduced for mobile)
+  const COLLAPSED_LOGO_H_SPLIT = 34; // px (reduced for mobile)
+  const logoHInline =
+    COLLAPSED_LOGO_H_INLINE + (EXPANDED_LOGO_H_INLINE - COLLAPSED_LOGO_H_INLINE) * (1 - effectiveProgress);
+  const logoHSplit =
+    COLLAPSED_LOGO_H_SPLIT + (EXPANDED_LOGO_H_SPLIT - COLLAPSED_LOGO_H_SPLIT) * (1 - effectiveProgress);
+  // Render the split logo larger via CSS transform so it doesn't increase layout height
+  const splitScale = Math.max(1, logoHSplit / Math.max(1, logoHInline));
+
+  const leftNav = [
+    { href: "/", label: "Home" },
+    { href: "/about", label: "About" },
+  ];
+
+  const rightNav = [
+    { href: "/coming-soon", label: "Projects" },
+    { href: "/coming-soon", label: "Shop" },
+  ];
+
+  const allNavForMobile = [...leftNav, ...rightNav, { href: "/contact", label: "Contact" }];
+
+  // Match the dropdown's animation: header color blends over the same duration
+  const PANEL_EASING = "cubic-bezier(0.33, 1, 0.68, 1)";
+  const PANEL_DURATION_OPEN_MS = 480;
+  const PANEL_DURATION_CLOSE_MS = 300;
+  const headerTransitionMs = menuOpen ? PANEL_DURATION_OPEN_MS : PANEL_DURATION_CLOSE_MS;
+
+  // Delay the fade back to light after closing
+  useEffect(() => {
+    if (menuOpen) {
+      setHeaderDark(true);
       return;
     }
+    const HOLD_MS = 140; // slight delay to let panel retract first
+    const t = window.setTimeout(() => setHeaderDark(false), HOLD_MS);
+    return () => window.clearTimeout(t);
+  }, [menuOpen]);
 
-    const updateHeight = () => {
-      const height = element.offsetHeight;
-      setHeaderHeight(height);
-      if (initialHeaderHeightRef.current === null || height > initialHeaderHeightRef.current) {
-        initialHeaderHeightRef.current = height;
-      }
-      document.documentElement.style.setProperty("--header-height", `${height}px`);
-    };
-
-    updateHeight();
-
-    if (typeof ResizeObserver !== "undefined") {
-      const resizeObserver = new ResizeObserver(() => updateHeight());
-      resizeObserver.observe(element);
-
-      return () => {
-        resizeObserver.disconnect();
-        document.documentElement.style.removeProperty("--header-height");
-      };
-    }
-
-    return () => {
-      document.documentElement.style.removeProperty("--header-height");
-    };
-  }, []);
-
-  useEffect(() => {
-    const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
-
-    const handleScroll = () => {
-      const currentY = window.scrollY;
-      const baseDistance = initialHeaderHeightRef.current ?? headerHeight ?? 160;
-      const distance = baseDistance > 0 ? baseDistance : 160;
-      const progress = clamp(currentY / distance, 0, 1);
-      setScrollProgress(progress);
-    };
-
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [headerHeight]);
-
-  const sharedNavProps = useMemo<Omit<HeaderSharedProps, "isScrolled" | "scrollProgress">>(() => {
-    const contactItem = NAV_ITEMS.find((item) => item.href === "coming-soon");
-    const primaryNavItems = contactItem
-      ? NAV_ITEMS.filter((item) => item.href !== contactItem.href)
-      : NAV_ITEMS;
-    const midpoint = Math.ceil(primaryNavItems.length / 2);
-
-    return {
-      navItems: NAV_ITEMS,
-      primaryNavItems,
-      leftNavItems: primaryNavItems.slice(0, midpoint),
-      rightNavItems: primaryNavItems.slice(midpoint),
-      contactItem,
-    };
-  }, []);
-
-  const isScrolled = scrollProgress > 0.01;
-  const blurAmount = 6 * scrollProgress;
-  const shadowOpacity = 0.65 * scrollProgress;
+  const headerBg = headerDark ? "var(--brand-dark)" : "var(--brand-light)";
+  const headerFg = headerDark ? "var(--brand-light)" : "var(--brand-dark)";
 
   return (
-    <div
-      ref={wrapperRef}
-      className="fixed inset-x-0 top-0 z-50 w-full transition-[box-shadow,backdrop-filter] duration-300 ease-out"
+    <header
+      ref={headerRef}
+      className={`sticky top-0 z-40 backdrop-blur`}
       style={{
-        backdropFilter: blurAmount <= 0 ? "none" : `blur(${blurAmount}px)`,
-        boxShadow:
-          shadowOpacity <= 0
-            ? "none"
-            : `0 10px 40px -20px rgba(0, 0, 0, ${shadowOpacity.toFixed(3)})`,
-        backgroundColor: "var(--brand-light)",
+        backgroundColor: headerBg,
+        color: headerFg,
+        transitionProperty: "background-color, color",
+        transitionTimingFunction: PANEL_EASING,
+        transitionDuration: `${headerTransitionMs}ms`,
       }}
     >
-      <HeaderComponent
-        {...sharedNavProps}
-        isScrolled={isScrolled}
-        scrollProgress={scrollProgress}
-      />
-    </div>
+      <div
+        className="mx-auto w-full max-w-6xl grid grid-cols-[1fr_auto_1fr] items-center px-3 sm:px-4 md:px-5 lg:px-6 xl:px-8 sm:gap-x-6 md:gap-x-8 lg:gap-x-12 xl:gap-x-16"
+        style={{ paddingTop: `${padY}px`, paddingBottom: `${padY}px`, transition: "padding 140ms ease-out" }}
+      >
+        {/* Left column: mobile hamburger OR desktop left nav */}
+        <div className="flex items-center md:hidden">
+          <HamburgerMenu items={allNavForMobile} open={menuOpen} onToggle={setMenuOpen} />
+        </div>
+        <nav className="hidden md:flex items-center justify-end gap-4 md:gap-5 lg:gap-6 xl:gap-8">
+          {leftNav.map(({ href, label }) => (
+            <NavLink key={`${href}-${label}`} href={href} compact>
+              {label}
+            </NavLink>
+          ))}
+        </nav>
+
+        {/* Center column: perfectly centered logo, vertically aligned */}
+        <div className="justify-self-center px-3 sm:px-4 md:px-6 lg:px-8">
+          <Link href="/" aria-label="Go to home" className="inline-block">
+            <span className="sr-only">Fairfax Interiors</span>
+            {/* Inline (full) logo for mobile and very wide screens */}
+            <LogoInline
+              className="w-auto text-current [&_*]:fill-current hidden xl:block"
+              style={{ height: `${logoHInline}px`, transition: "height 140ms ease-out" }}
+              aria-hidden="true"
+            />
+            {/* Split logo for mobile through lg (scaled up without affecting header height) */}
+            <div className="block xl:hidden px-6 sm:px-8 md:px-10 lg:px-12">
+              <LogoSplit
+                className="w-auto text-current [&_*]:fill-current block"
+                style={{
+                  height: `${logoHInline}px`,
+                  transform: `scale(${splitScale})`,
+                  transformOrigin: "center center",
+                  transition: "transform 140ms ease-out, height 140ms ease-out",
+                }}
+                aria-hidden="true"
+              />
+            </div>
+          </Link>
+        </div>
+
+        {/* Right column: desktop right nav; mobile uses spacer */}
+        <div className="hidden md:flex items-center justify-start">
+          <nav className="flex items-center gap-4 md:gap-5 lg:gap-6 xl:gap-8">
+            {rightNav.map(({ href, label }) => (
+              <NavLink key={`${href}-${label}`} href={href} compact>
+                {label}
+              </NavLink>
+            ))}
+          </nav>
+        </div>
+
+        {/* Mobile spacer to keep logo centered relative to hamburger width */}
+        <div className="md:hidden justify-self-end w-12 sm:w-14" aria-hidden="true" />
+      </div>
+      {/* Desktop-only Contact button pinned to the screen edge, not grouped with nav */}
+      <div className="hidden md:block absolute right-3 sm:right-4 md:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-50">
+        <Button href="/contact" className="!py-1.5 !px-5 !text-sm sm:!text-base tracking-[0.18em]">
+          Contact
+        </Button>
+      </div>
+    </header>
   );
 }
